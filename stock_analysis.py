@@ -19,7 +19,7 @@ try:
         raise ValueError("No data returned from Yahoo Finance")
         
     # Normalize prices to compare performance
-    normalized = data['Adj Close'].div(data['Adj Close'].iloc[0]).mul(100)
+    normalized = data['Close'].div(data['Close'].iloc[0]).mul(100)
     
     # Create plot
     ax = normalized.plot(linewidth=2.5, title='Stock Price Comparison (Normalized)')
