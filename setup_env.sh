@@ -5,7 +5,7 @@ set -x
 
 # Initialize environment
 if [ ! -d "venv" ]; then
-    /opt/homebrew/opt/python@3.9/bin/python3 -m venv venv --prompt "AI_Companion" --clear --verbose
+    python3 -m venv venv --prompt "AI_Companion" --clear
     source venv/bin/activate
     chmod +x venv/bin/activate
     pip install -U pip setuptools wheel
