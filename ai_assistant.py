@@ -1,14 +1,20 @@
 import click
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
 
 @click.group()
 def cli():
-    """AI Companion Interface - Your Swiss Army Knife for Development"""
+    """AI Companion CLI"""
     pass
 
 @cli.command()
-def start():
-    """Initialize AI Companion Session"""
-    print("🚀 AI Companion Ready - Describe your task or goal:")
-    
-if __name__ == '__main__':
+@click.argument('task')
+def start(task):
+    """Start AI Companion with a task"""
+    print(f"🚀 AI Companion Ready - Describe your task or goal: {task}")
+    # Add your AI integration logic here
+
+if __name__ == "__main__":
     cli()

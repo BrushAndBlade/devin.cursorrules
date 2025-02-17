@@ -1,43 +1,21 @@
 import yfinance as yf
 import matplotlib.pyplot as plt
-import seaborn as sns
 from datetime import datetime
 
-# Configure style
-sns.set(style="whitegrid")
-plt.figure(figsize=(14, 7))
-
-# Define stocks and timeframe
-tickers = ['GOOGL', 'DPZ', 'SPY']  # Added SPY (S&P 500) as benchmark
-end_date = datetime.now().strftime('%Y-%m-%d')
-
-try:
-    # Download data with error handling
-    data = yf.download(tickers, start='2020-01-01', end=end_date, progress=False)
+def analyze_stocks(tickers, start_date, end_date):
+    data = yf.download(tickers, start=start_date, end=end_date)['Adj Close']
+    normalized = data.div(data.iloc[0]).mul(100)
     
-    if data.empty:
-        raise ValueError("No data returned from Yahoo Finance")
-        
-    # Normalize prices to compare performance
-    normalized = data['Close'].div(data['Close'].iloc[0]).mul(100)
+    plt.figure(figsize=(12,6))
+    normalized.plot()
+    plt.title('Stock Price Comparison')
+    plt.ylabel('Normalized Price (%)')
+    plt.xlabel('Date')
+    plt.grid(True)
     
-    # Create plot
-    ax = normalized.plot(linewidth=2.5, title='Stock Price Comparison (Normalized)')
-    ax.set_ylabel('Percentage Change (%)')
-    ax.set_xlabel('Date')
-    
-    # Add moving averages
-    for ticker in tickers:
-        normalized[ticker].rolling(50).mean().plot(linestyle='--', alpha=0.7)
-    
-    plt.legend(title='Tickers', loc='upper left')
-    plt.tight_layout()
-    
-    # Save with timestamp
-    filename = f'stock_comparison_{end_date}.png'
-    plt.savefig(filename, dpi=300)
+    filename = f"stock_comparison_{datetime.now().strftime('%Y-%m-%d')}.png"
+    plt.savefig(filename)
     print(f"Chart saved as {filename}")
-    
-except Exception as e:
-    print(f"Error: {str(e)}")
-    exit(1) 
+
+if __name__ == "__main__":
+    analyze_stocks(['AAPL', 'MSFT', 'GOOGL'], '2020-01-01', datetime.now().strftime('%Y-%m-%d')) 
